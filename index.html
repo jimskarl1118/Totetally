@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!--=============== FLATICON ===============-->
+    <link rel='stylesheet' 
+    href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <title>Ecommerce Website</title>
+  </head>
+  <body>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Chatbot Container */
+        .chatbot-container {
+            line-height: 1.6;
+            padding: 15px;
+            font-size: 16px;
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 400px;
+            height: 450px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        /* Chatbot Header */
+        .chatbot-header {
+            background-color: hsl(231, 68%, 45%);
+            color: white;
+            padding: 10px;
+            font-family: "Style Script", cursive;
+            font-size: 22px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* Chatbot Messages */
+        .chatbot-messages {
+            font-family: "Merriweather", serif;
+            font-size: small;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Chatbot Input */
+        .chatbot-input {
+            display: flex;
+            border-top: 2px solid #ddd;
+            padding: 10px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 0 0 0 10px;
+            outline: none;
+        }
+
+        .chatbot-input button {
+            background-color: hsl(231, 68%, 45%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 0 0 10px 0;
+            cursor: pointer;
+        }
+
+        /* Chatbot Button */
+        .chatbot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: hsl(231, 68%, 45%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .chatbot-button:hover {
+            background-color: hsl(231, 68%, 35%);
+        }
+
+        /* Chat Options */
+        .chat-options button {
+            margin-top: 5px;
+            background-color: hsl(231, 68%, 45%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-options button:hover {
+            background-color: hsl(231, 68%, 35%);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Chatbot Button -->
+    <button class="chatbot-button" onclick="toggleChatbot()">
+        <i class="fas fa-comment"></i>
+    </button>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot" class="chatbot-container">
+        <div class="chatbot-header">
+            ✨Tally - Your Art Buddy 🎨✨
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <p>Hey there! 😊 How can I help you today?</p>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleChatbot() {
+            var chatbot = document.getElementById('chatbot');
+            chatbot.style.display = (chatbot.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function sendMessage() {
+            var userMessage = document.getElementById('user-input').value;
+            if (userMessage.trim()) {
+                var messageContainer = document.getElementById('chatbot-messages');
+                messageContainer.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+                document.getElementById('user-input').value = '';
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+
+                setTimeout(() => {
+                    messageContainer.innerHTML += `
+                        <p><strong>Tally🎨:</strong> Thanks for reaching out! 😊 Here's some info to help you:</p>
+                        <div class="chat-options">
+                            <button onclick="handleFAQ('What is Tote-tally?')">What is Tote-tally?</button>
+                            <button onclick="handleFAQ('How does the paint-by-numbers tote bag work?')">How does the tote work?</button>
+                            <button onclick="handleFAQ('What comes in a paint-by-numbers tote bag kit?')">What's in the kit?</button>
+                        </div>
+                    `;
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function handleFAQ(question) {
+            var messageContainer = document.getElementById('chatbot-messages');
+            if (question === 'What is Tote-tally?') {
+                messageContainer.innerHTML += `<p><strong>Tally🎨:</strong> Tote-tally is a brand that offers paint-by-numbers tote bags, letting you create your own unique designs on eco-friendly totes! 🌱</p>`;
+            } else if (question === 'How does the paint-by-numbers tote bag work?') {
+                messageContainer.innerHTML += `<p><strong>Tally🎨:</strong> Each tote comes with a pre-printed design, matching paints, and instructions. Just follow the numbers and create your masterpiece! 🎨✨</p>`;
+            } else if (question === 'What comes in a paint-by-numbers tote bag kit?') {
+                messageContainer.innerHTML += `<p><strong>Tally🎨:</strong> The kit includes a tote bag, acrylic paints, brushes, and easy-to-follow instructions! 🖌️</p>`;
+            }
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        document.getElementById('user-input').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+
+    </script>
+
+    <!--=============== HEADER ===============-->
+    <header class="header">
+      <div class="header__top">
+        <div class="header__container container">
+          <div class="header__contact">
+            <span>(+63)933-438-5370 | (+63)947-200-4219</span>   
+
+            <span>  </span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img src="assets/Images/totetally-logo.png" alt="" class="nav__logo-img"/>
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link active-link">Home</a>
+            </li> 
+
+            <li class="nav__item">
+              <a href="shop.html" class="nav__link">Shop</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="accounts.html" class="nav__link">About Us</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="login-register.html" class="nav__link">Guide to Tote-tally Bags</a>
+            </li>
+          </ul>
+
+          <!-- Cart Icon with Count -->
+      <a href="cart.html" class="header__action-btn">
+        <img src="assets/img/icon-cart.svg" alt="Cart">
+        <span id="cart-count" class="count" style="display: none;">0</span>
+      </a>
+    </div>
+  </nav>
+    </header>
+
+
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+
+      <!--=============== BREADCRUMB ===============-->
+
+
+    <!--=============== HOME ===============-->
+      <section class="home section--lg" style="background: url('assets/Images/sky.png') no-repeat center center/cover;">
+        <div class="home__container container grid">
+          <div class="home__content">
+            <span class="home__subtitle"></span>
+            <h1 class="home__title">
+              Paint Your Style <span><br>Tote-tally Yours!</span>
+            </h1>
+            <p class="home__description">
+              Carry creativity everywhere with <br>Tote-tally's paint-by-number designs
+            </p>
+            <a href="shop.html" class="btn">Shop more</a>
+          </div>
+
+          <img src="assets/Images/homepage1.png" alt="" class="home__img" />
+        </div>
+      </section>
+
+      <!--=============== CATEGORIES ===============-->
+      
+      <!--=============== PRODUCTS ===============-->
+      <section class="products section container">
+        <div class="tab__btns">
+          <span class="tab__btn active-tab" data-target="#featured">Featured</span>
+        </div>
+
+        <div class="tab__items">
+          <div class="tab__item active-tab" content id="featured">
+            <div class="products__container grid">
+              <div class="product__item">
+                <div class="product__banner">
+                  <a href="details.html" class="product__images">
+                    <img src="assets/Images/p5.png" alt="" 
+                    class="product__img default">
+
+                    <img src="assets/Images/p5.1.png" alt="" 
+                    class="product__img hover">
+                  </a>
+
+                  
+                </div>
+
+                <div class="product__content">
+                  <span class="product__category">Tote-tally Logo</span>
+                  <a href="details.html">
+                    <h3 class="product__title">Original Tote-tally Logo</h3>
+                  </a>
+                  <div class="product__rating">
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                  </div>
+                  <div class="product__price flex">
+                    <span class="new__price">₱225.00</span>
+                    <span class="old__price">₱250.00</span>
+                  </div>
+
+                  <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="1" data-name="Original Tote-tally Logo" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i></a>
+                  
+                </div>
+              </div>
+
+              <div class="product__item">
+                <div class="product__banner">
+                  <a href="details.html" class="product__images">
+                    <img src="assets/Images/p4.png" alt="" 
+                    class="product__img default">
+
+                    <img src="assets/Images/p4.1.png" alt="" 
+                    class="product__img hover">
+                  </a>
+
+                  
+                </div>
+
+                <div class="product__content">
+                  <span class="product__category">Paint-by-numbers</span>
+                  <a href="details.html">
+                    <h3 class="product__title">Tote-tally Sun&Bloom</h3>
+                  </a>
+                  <div class="product__rating">
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                  </div>
+                  <div class="product__price flex">
+                    <span class="new__price">₱225.00</span>
+                    <span class="old__price">₱250.00</span>
+                  </div>
+
+                  <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="2" data-name="Tote-tally Sun&Bloom" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i></a>
+                  
+                </div>
+              </div>
+
+              <div class="product__item">
+                <div class="product__banner">
+                  <a href="details.html" class="product__images">
+                    <img src="assets/Images/p2.png" alt="" 
+                    class="product__img default">
+
+                    <img src="assets/Images/p2.1.png" alt="" 
+                    class="product__img hover">
+                  </a>
+
+                  
+                </div>
+
+                <div class="product__content">
+                  <span class="product__category">Paint-by-numbers</span>
+                  <a href="details.html">
+                    <h3 class="product__title">Tote-tally Groovy</h3>
+                  </a>
+                  <div class="product__rating">
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                  </div>
+                  <div class="product__price flex">
+                    <span class="new__price">₱225.00</span>
+                    <span class="old__price">₱250.00</span>
+                  </div>
+
+                  <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="4" data-name="Tote-tally Groovy" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i></a>
+                </div>
+              </div>
+
+              <div class="product__item">
+                <div class="product__banner">
+                  <a href="details.html" class="product__images">
+                    <img src="assets/Images/p1.png" alt="" 
+                    class="product__img default">
+
+                    <img src="assets/Images/p1.1.png" alt="" 
+                    class="product__img hover">
+                  </a>
+
+                  
+                </div>
+
+                <div class="product__content">
+                  <span class="product__category">Paint-by-numbers</span>
+                  <a href="details.html">
+                    <h3 class="product__title">Tote-tally Quirky Sun</h3>
+                  </a>
+                  <div class="product__rating">
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                    <i class="fi fi-rs-star"></i>
+                  </div>
+                  <div class="product__price flex">
+                    <span class="new__price">₱225.00</span>
+                    <span class="old__price">₱250.00</span>
+                  </div>
+
+                  <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="5" data-name="Tote-tally Quirky Sun" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i></a>
+                  
+                </div>
+
+              <script>
+
+          // Function to update cart count dynamically
+function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    let cartCountElement = document.getElementById("cart-count");
+
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = totalItems > 0 ? "inline-block" : "none"; 
+    }
+}
+
+// Function to add item to cart
+function addToCart(productId, productName, productPrice, productImage) {
+    const product = {
+        id: productId,
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        quantity: 1
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProduct = cart.find(item => item.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount(); // Update cart count dynamically
+}
+
+// Attach click events to all "Add to Cart" buttons
+document.querySelectorAll('.cart__btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const productId = parseInt(this.getAttribute('data-id'));
+        const productName = this.getAttribute('data-name');
+        const productPrice = parseFloat(this.getAttribute('data-price'));
+        const productImage = this.closest('.product__item').querySelector('.default').getAttribute('src');
+
+        addToCart(productId, productName, productPrice, productImage);
+    });
+});
+
+// Load cart count when page loads
+document.addEventListener("DOMContentLoaded", updateCartCount);
+              </script>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+
+<!--=============== MAIN JS ===============-->
+<script src="main.js"></script>
+
+
+<!--=============== MAIN JS ===============-->
+<script src="main.js"></script>
+
+
+      <!--=============== DEALS ===============-->
+      <!--=============== NEW ARRIVALS ===============-->
+      <section class="new__arrivals"></section>
+
+      <!--=============== SHOWCASE ===============-->
+      <section class="showcase"></section>
+
+      <!--=============== NEWSLETTER ===============-->
+      <section class="newsletter"></section>
+    </main>
+
+    <!--=============== FOOTER ===============-->
+    <footer class="footer container">
+      <div class="footer__container grid">
+        <div class="footer__content">
+          <a href="index.html" class="footer__logo">
+            <img src="assets/Images/totetally-logo.png" alt="" class="footer__logo-img">
+          </a>
+
+          <h4 class="footer__subtitle">Contact Us</h4>
+
+          <p class="footer__description">
+            <span>Address:</span> La huerta, Parañaque City
+          </p>
+
+          <p class="footer__description">
+            <span>Phone:</span> (+63)933-438-5370 | (+63)947-200-4219
+          </p>
+
+          <p class="footer__description">
+            <span>Store hours:</span> Mon-Sat 9:00am - 5:00pm
+          </p>
+
+          <p class="footer__description">
+            <span>Email us:</span> totetallybags1@gmail.com
+          </p>
+
+          <div class="footer__social">
+            <h4 class="footer__subtitle">Follow Us</h4>
+
+            <div class="footer__social-links flex">
+              <a href="https://www.facebook.com/profile.php?id=61572291844592">
+                <img src="assets/img/icon-facebook.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="https://www.instagram.com/totetally2025/">
+                <img src="assets/img/icon-instagram.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="">
+                <img src="assets/img/icon-tiktok.svg" alt="" class="footer__social-icon">
+              </a>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">Address</h3>
+
+          <ul class="footer__links">
+            <li><a href="" class="footer__link">About Us</a></li>
+            <li><a href="" class="footer__link">Privacy Policy</a></li>
+            <li><a href="" class="footer__link">Terms & Conditions</a></li>
+            <li><a href="" class="footer__link">How it works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">My Account</h3>
+
+          <ul class="footer__links">
+            <li><a href="cart.html" class="footer__link">View Cart</a></li>
+            <li><a href="shop.html" class="footer__link">Order</a></li>
+          </ul>
+        </div>
+      <div class="footer__bottom">
+        <p class="copyright">&copy; 2025 Tote-tally. All rights reserved</p>
+        <span class="designer">Designed by Tote-tally</span>
+      </div>
+    </footer>
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
+    
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

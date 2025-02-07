@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--=============== FLATICON ===============-->
+    <link rel='stylesheet' 
+    href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <title>Ecommerce Website</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <header class="header">
+      <div class="header__top">
+        <div class="header__container container">
+          <div class="header__contact">
+            <span>(+63)933-438-5370 | (+63)947-200-4219</span>   
+
+            <span>  </span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img src="assets/Images/totetally-logo.png" alt="" class="nav__logo-img"/>
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Home</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="shop.html" class="nav__link">Shop</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="accounts.html" class="nav__link">About Us</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="login-register.html" class="nav__link active-link">Guide to Tote-tally Bags</a>
+            </li>
+          </ul>
+
+
+
+          <!-- Cart Icon with Count -->
+      <a href="cart.html" class="header__action-btn">
+        <img src="assets/img/icon-cart.svg" alt="Cart">
+        <span id="cart-count" class="count" style="display: none;">0</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+// Function to update cart count dynamically
+function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    let cartCountElement = document.getElementById("cart-count");
+
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = totalItems > 0 ? "inline-block" : "none"; 
+    }
+}
+
+// Function to add item to cart
+function addToCart(productId, productName, productPrice, productImage) {
+    const product = {
+        id: productId,
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        quantity: 1
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProduct = cart.find(item => item.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount(); // Update cart count dynamically
+}
+
+// Attach click events to all "Add to Cart" buttons
+document.querySelectorAll('.cart__btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const productId = parseInt(this.getAttribute('data-id'));
+        const productName = this.getAttribute('data-name');
+        const productPrice = parseFloat(this.getAttribute('data-price'));
+        const productImage = this.closest('.product__item').querySelector('.default').getAttribute('src');
+
+        addToCart(productId, productName, productPrice, productImage);
+    });
+});
+
+// Load cart count when page loads
+document.addEventListener("DOMContentLoaded", updateCartCount);
+
+</script>
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+      <!--=============== BREADCRUMB ===============-->
+      <section class="breadcrumb">
+        <ul class="breadcrumb__list flex container">
+          <li><a href="index.html" class="breadcrumb__link">Home</a></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Guide to Tote-tally Bags</span></li>
+        </ul>
+      </section>
+
+      <!--=============== ACCOUNTS ===============-->
+      <section class="home section--lg" style="background: url('assets/Images/sky.png') no-repeat center center/cover;">
+      <section class="home section--lg">
+        <div class="home__container2 container grid">
+          <div class="home__content2">
+            <img src="assets/Images/guidie.png" alt="" class="home__imgg"/>
+          </div>
+        </div>
+      </section>
+      </section>
+
+      <!--=============== NEWSLETTER ===============-->
+      <section class="newsletter"></section>
+    </main>
+
+    <!--=============== FOOTER ===============-->
+    <footer class="footer container">
+      <div class="footer__container grid">
+        <div class="footer__content">
+          <a href="index.html" class="footer__logo">
+            <img src="assets/Images/totetally-logo.png" alt="" class="footer__logo-img">
+          </a>
+
+          <h4 class="footer__subtitle">Contact Us</h4>
+
+          <p class="footer__description">
+            <span>Address:</span> La huerta, Parañaque City
+          </p>
+
+          <p class="footer__description">
+            <span>Phone:</span> (+63)933-438-5370 | (+63)947-200-4219
+          </p>
+
+          <p class="footer__description">
+            <span>Store hours:</span> Mon-Sat 9:00am - 5:00pm
+          </p>
+
+          <p class="footer__description">
+            <span>Email us:</span> totetallybags1@gmail.com
+          </p>
+
+          <div class="footer__social">
+            <h4 class="footer__subtitle">Follow Us</h4>
+
+            <div class="footer__social-links flex">
+              <a href="https://www.facebook.com/profile.php?id=61572291844592">
+                <img src="assets/img/icon-facebook.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="https://www.instagram.com/totetally2025/">
+                <img src="assets/img/icon-instagram.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="">
+                <img src="assets/img/icon-tiktok.svg" alt="" class="footer__social-icon">
+              </a>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">Address</h3>
+
+          <ul class="footer__links">
+            <li><a href="" class="footer__link">About Us</a></li>
+            <li><a href="" class="footer__link">Privacy Policy</a></li>
+            <li><a href="" class="footer__link">Terms & Conditions</a></li>
+            <li><a href="" class="footer__link">How it works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">My Account</h3>
+
+          <ul class="footer__links">
+            <li><a href="cart.html" class="footer__link">View Cart</a></li>
+            <li><a href="shop.html" class="footer__link">Order</a></li>
+          </ul>
+        </div>
+      <div class="footer__bottom">
+        <p class="copyright">&copy; 2025 Tote-tally. All rights reserved</p>
+        <span class="designer">Designed by Tote-tally</span>
+      </div>
+    </footer>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

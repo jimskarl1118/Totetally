@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!--=============== FLATICON ===============-->
+    <link rel='stylesheet' 
+    href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'/>
+
+    <!--=============== SWIPER CSS ===============-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <title>Ecommerce Website</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <header class="header">
+      <div class="header__top">
+        <div class="header__container container">
+          <div class="header__contact">
+            <span>(+63)933-438-5370 | (+63)947-200-4219</span>   
+
+            <span>  </span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img src="assets/Images/totetally-logo.png" alt="" class="nav__logo-img"/>
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Home</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="shop.html" class="nav__link">Shop</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="accounts.html" class="nav__link">About Us</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="login-register.html" class="nav__link">Guide to Tote-tally Bags</a>
+            </li>
+          </ul>
+
+          <!-- Cart Icon with Count -->
+      <a href="cart.html" class="header__action-btn">
+        <img src="assets/img/icon-cart.svg" alt="Cart">
+        <span id="cart-count" class="count" style="display: none;">0</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+// Function to update cart count dynamically
+function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    
+    let cartCountElement = document.getElementById("cart-count");
+
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+        cartCountElement.style.display = totalItems > 0 ? "inline-block" : "none"; 
+    }
+}
+
+// Function to add item to cart
+function addToCart(productId, productName, productPrice, productImage) {
+    const product = {
+        id: productId,
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        quantity: 1
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingProduct = cart.find(item => item.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount(); // Update cart count dynamically
+}
+
+// Attach click events to all "Add to Cart" buttons
+document.querySelectorAll('.cart__btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const productId = parseInt(this.getAttribute('data-id'));
+        const productName = this.getAttribute('data-name');
+        const productPrice = parseFloat(this.getAttribute('data-price'));
+        const productImage = this.closest('.product__item').querySelector('.default').getAttribute('src');
+
+        addToCart(productId, productName, productPrice, productImage);
+    });
+});
+
+// Load cart count when page loads
+document.addEventListener("DOMContentLoaded", updateCartCount);
+
+</script>
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+      <!--=============== BREADCRUMB ===============-->
+      <section class="breadcrumb">
+        <ul class="breadcrumb__list flex container">
+          <li><a href="index.html" class="breadcrumb__link">Home</a></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Tote Bags</span></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Groovy</span></li>
+        </ul>
+      </section>
+
+      <!--=============== DETAILS ===============-->
+      <section class="details section--lg">
+        <div class="details__container container grid">
+            <div class="details__group">
+                <img src="assets/Images/p2.png" alt="" class="details__img" id="main-image" />
+    
+                <div class="details__small-images grid">
+                    <img src="assets/Images/p2.1.png" alt="" class="details__small-img" onclick="changeImage(this)" />
+                    <img src="assets/Images/p2.2.png" alt="" class="details__small-img" onclick="changeImage(this)" />
+                    <img src="assets/Images/p2.3.png" alt="" class="details__small-img" onclick="changeImage(this)" />
+                </div>
+            </div>
+    
+            <div class="details__group">
+                <h3 class="details__title">Tote-tally Groovy</h3>
+                <p class="details__brand">Brands: <span>Tote-tally</span></p>
+    
+                <div class="details__price flex">
+                    <span class="new__price">₱225.00</span>
+                    <span class="old__price">₱250.00</span>
+                    <span class="save__price">10% Off</span>
+                </div>
+    
+                <p class="short__description">
+                    Show off your love for creativity and style with the "Tote-tally Original Logo" design! 
+                    Featuring our signature playful logo in bold blue and yellow with splashes of artistic 
+                    flair, this tote bag celebrates your unique artistic journey.
+                    This paint-by-numbers tote bag is perfect for beginners and seasoned artists alike, 
+                    offering an easy and fun way to personalize your own piece of art. Use it as a stylish 
+                    accessory or a functional everyday bag that’s truly tote-tally yours!
+                </p>
+    
+
+    
+                <div class="details__action">
+                    <input type="number" class="quantity" value="1" id="quantity-input" />
+    
+                    <a href="#" class="btn btn--sm" id="add-to-cart">Add to Cart</a>
+                </div>
+                <ul class="details__meta">
+                    <li class="meta__list flex">
+                        <span>Tags:</span> Paint-by-numbers, Tote bag
+                    </li>
+                    <li class="meta__list flex">
+                        <span>Availability:</span> 1 Item In Stock
+                    </li>
+                </ul>
+            </div>
+        </div> 
+    </section>
+    
+    <script>
+      // Change the main image when a thumbnail is clicked
+      function changeImage(element) {
+          document.getElementById('main-image').src = element.src;
+      }
+  
+      // Product details for "Tote-tally Original Logo"
+      const productName = "Tote-tally Groovy";
+      const originalPrice = 225.00;
+      const discountedPrice = 225.00;
+      const productImage = 'assets/Images/p2.png';  // Main image for the product
+  
+      document.getElementById('add-to-cart').addEventListener('click', function() {
+          // Get quantity input value
+          const quantity = parseInt(document.getElementById('quantity-input').value);
+  
+          // Product object to store
+          const product = {
+              name: productName,
+              price: discountedPrice,
+              quantity: quantity,
+              image: productImage,
+              designType: 'Paint-by-numbers'  // Default design type
+          };
+  
+          // Retrieve the cart from localStorage, or initialize an empty array if not present
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  
+          // Check if the product already exists in the cart
+          const existingProduct = cart.find(item => item.name === product.name);
+  
+          if (existingProduct) {
+              // If the product is already in the cart, increase its quantity
+              existingProduct.quantity += quantity;
+          } else {
+              // Otherwise, add the new product to the cart
+              cart.push(product);
+          }
+  
+          // Store the updated cart in localStorage
+          localStorage.setItem('cart', JSON.stringify(cart));
+  
+          // Update the cart count on the icon without reloading the page
+          updateCartCount();
+      });
+  
+      // Function to update the cart icon count
+      function updateCartCount() {
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+          
+          // Update the cart count display (Assuming the cart icon has id 'cart-count')
+          document.getElementById('cart-count').textContent = cartCount;
+      }
+  
+      // Call the updateCartCount function to initialize the cart count when the page loads
+      window.onload = function() {
+          updateCartCount();
+      };
+      </script>
+      <!--=============== DETAILS TAB ===============-->
+      <section class="details__tab"></section>
+
+      <!--=============== PRODUCTS ===============-->
+      <section class="products container section--lg">
+        <h3 class="section__title"><span>Related</span> Products</h3>
+
+        <div class="products__container grid">
+          <div class="product__item">
+            <div class="product__banner">
+              <a href="details.html" class="product__images">
+                <img src="assets/Images/p5.png" alt="" 
+                class="product__img default">
+
+                <img src="assets/Images/p5.1.png" alt="" 
+                class="product__img hover">
+              </a>
+
+              
+            </div>
+
+            <div class="product__content">
+              <span class="product__category">Tote-tally Logo</span>
+              <a href="details.html">
+                <h3 class="product__title">Original Tote-tally Logo</h3>
+              </a>
+              <div class="product__rating">
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+              </div>
+              <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="1" data-name="Original Tote-tally Logo" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i>
+              </a>
+
+              <a href="#" class="action__btn cart__btn" aria-label="Add to Cart">
+                <i class="fi fi-rs-shopping-bag-add"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="product__item">
+            <div class="product__banner">
+              <a href="details1.html" class="product__images">
+                <img src="assets/Images/p4.png" alt="" 
+                class="product__img default">
+
+                <img src="assets/Images/p4.1.png" alt="" 
+                class="product__img hover">
+              </a>
+
+              
+            </div>
+
+            <div class="product__content">
+              <span class="product__category">Paint-by-numbers</span>
+              <a href="details1.html">
+                <h3 class="product__title">Tote-tally Sun&Bloom</h3>
+              </a>
+              <div class="product__rating">
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+              </div>
+              <div class="product__price flex">
+                <span class="new__price">₱225.00</span>
+                <span class="old__price">₱250.00</span>
+              </div>
+
+              <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="2" data-name="Tote-tally Sun&Bloom" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="product__item">
+            <div class="product__banner">
+              <a href="details2.html" class="product__images">
+                <img src="assets/Images/p3.png" alt="" 
+                class="product__img default">
+
+                <img src="assets/Images/p3.1.png" alt="" 
+                class="product__img hover">
+              </a>
+
+              
+            </div>
+
+            <div class="product__content">
+              <span class="product__category">Paint-by-numbers</span>
+              <a href="details2.html">
+                <h3 class="product__title">Tote-tally Chill Flower</h3>
+              </a>
+              <div class="product__rating">
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+              </div>
+              <div class="product__price flex">
+                <span class="new__price">₱225.00</span>
+                <span class="old__price">₱250.00</span>
+              </div>
+
+              <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="3" data-name="Tote-tally Chill Flower" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="product__item">
+            <div class="product__banner">
+              <a href="details4.html" class="product__images">
+                <img src="assets/Images/p1.png" alt="" 
+                class="product__img default">
+
+                <img src="assets/Images/p1.1.png" alt="" 
+                class="product__img hover">
+              </a> 
+            </div>
+
+            <div class="product__content">
+              <span class="product__category">Paint-by-numbers</span>
+              <a href="details4.html">
+                <h3 class="product__title">Tote-tally Quirky Sun</h3>
+              </a>
+              <div class="product__rating">
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+                <i class="fi fi-rs-star"></i>
+              </div>
+              <div class="product__price flex">
+                <span class="new__price">₱225.00</span>
+                <span class="old__price">₱250.00</span>
+              </div>
+
+              <a href="#" class="action__btn cart__btn add-to-cart-btn" aria-label="Add to Cart" data-id="5" data-name="Tote-tally Quirky Sun" data-price="225"><i class="fi fi-rs-shopping-bag-add"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <script>
+
+        // Function to update cart count dynamically
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+  
+  let cartCountElement = document.getElementById("cart-count");
+
+  if (cartCountElement) {
+      cartCountElement.textContent = totalItems;
+      cartCountElement.style.display = totalItems > 0 ? "inline-block" : "none"; 
+  }
+}
+
+// Function to add item to cart
+function addToCart(productId, productName, productPrice, productImage) {
+  const product = {
+      id: productId,
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      quantity: 1
+  };
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingProduct = cart.find(item => item.id === productId);
+
+  if (existingProduct) {
+      existingProduct.quantity += 1;
+  } else {
+      cart.push(product);
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount(); // Update cart count dynamically
+}
+
+// Attach click events to all "Add to Cart" buttons
+document.querySelectorAll('.cart__btn').forEach(button => {
+  button.addEventListener('click', function () {
+      const productId = parseInt(this.getAttribute('data-id'));
+      const productName = this.getAttribute('data-name');
+      const productPrice = parseFloat(this.getAttribute('data-price'));
+      const productImage = this.closest('.product__item').querySelector('.default').getAttribute('src');
+
+      addToCart(productId, productName, productPrice, productImage);
+  });
+});
+
+// Load cart count when page loads
+document.addEventListener("DOMContentLoaded", updateCartCount);
+            </script>
+
+      <!--=============== NEWSLETTER ===============-->
+      <section class="newsletter"></section>
+    </main>
+
+    <!--=============== FOOTER ===============-->
+    <footer class="footer container">
+      <div class="footer__container grid">
+        <div class="footer__content">
+          <a href="index.html" class="footer__logo">
+            <img src="assets/Images/totetally-logo.png" alt="" class="footer__logo-img">
+          </a>
+
+          <h4 class="footer__subtitle">Contact Us</h4>
+
+          <p class="footer__description">
+            <span>Address:</span> La huerta, Parañaque City
+          </p>
+
+          <p class="footer__description">
+            <span>Phone:</span> (+63)933-438-5370 | (+63)947-200-4219
+          </p>
+
+          <p class="footer__description">
+            <span>Store hours:</span> Mon-Sat 9:00am - 5:00pm
+          </p>
+
+          <p class="footer__description">
+            <span>Email us:</span> totetallybags1@gmail.com
+          </p>
+
+          <div class="footer__social">
+            <h4 class="footer__subtitle">Follow Us</h4>
+
+            <div class="footer__social-links flex">
+              <a href="https://www.facebook.com/profile.php?id=61572291844592">
+                <img src="assets/img/icon-facebook.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="https://www.instagram.com/totetally2025/">
+                <img src="assets/img/icon-instagram.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="">
+                <img src="assets/img/icon-tiktok.svg" alt="" class="footer__social-icon">
+              </a>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">Address</h3>
+
+          <ul class="footer__links">
+            <li><a href="" class="footer__link">About Us</a></li>
+            <li><a href="" class="footer__link">Privacy Policy</a></li>
+            <li><a href="" class="footer__link">Terms & Conditions</a></li>
+            <li><a href="" class="footer__link">How it works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">My Account</h3>
+
+          <ul class="footer__links">
+            <li><a href="cart.html" class="footer__link">View Cart</a></li>
+            <li><a href="shop.html" class="footer__link">Order</a></li>
+          </ul>
+        </div>
+      <div class="footer__bottom">
+        <p class="copyright">&copy; 2025 Tote-tally. All rights reserved</p>
+        <span class="designer">Designed by Tote-tally</span>
+      </div>
+    </footer>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>

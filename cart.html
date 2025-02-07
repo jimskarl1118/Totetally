@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+      emailjs.init("rPl6YLT6_oMKuOVP_");
+    </script>
+
+    <!--=============== FLATICON ===============-->
+    <link rel='stylesheet' 
+    href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-straight/css/uicons-regular-straight.css'
+    />
+
+    <!--=============== SWIPER CSS ===============-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <title>Ecommerce Website</title>
+  </head>
+  <body>
+    <!--=============== HEADER ===============-->
+    <header class="header">
+      <div class="header__top">
+        <div class="header__container container">
+          <div class="header__contact">
+            <span>(+63)933-438-5370 | (+63)947-200-4219</span>   
+
+            <span> </span> 
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav container">
+        <a href="index.html" class="nav__logo">
+          <img src="assets/Images/totetally-logo.png" alt="" class="nav__logo-img"/>
+        </a>
+
+        <div class="nav__menu" id="nav-menu">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a href="index.html" class="nav__link">Home</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="shop.html" class="nav__link">Shop</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="accounts.html" class="nav__link">About Us</a>
+            </li>
+
+            <li class="nav__item">
+              <a href="login-register.html" class="nav__link">Guide to Tote-tally Bags</a>
+            </li>
+          </ul>
+
+          <!-- Cart Icon with Count -->
+      <a href="cart.html" class="header__action-btn">
+        <img src="assets/img/icon-cart.svg" alt="Cart">
+        <span id="cart-count" class="count" style="display: none;">0</span>
+      </a>
+    </div>
+  </nav>
+</header>
+
+
+    <!--=============== MAIN ===============-->
+    <main class="main">
+      <!--=============== BREADCRUMB ===============-->
+      <section class="breadcrumb">
+        <ul class="breadcrumb__list flex container">
+          <li><a href="index.html" class="breadcrumb__link">Home</a></li>
+          <li><span class="breadcrumb__link">></span></li>
+          <li><span class="breadcrumb__link">Cart</span></li>
+        </ul>
+      </section>
+
+      <!--=============== CART ===============-->
+    
+    <!-- Cart Section -->
+<section class="cart-container">
+  <h1>Shopping Cart</h1>
+  <table class="cart-table">
+      <thead>
+          <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Type of Design</th>
+              <th>Subtotal</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody id="cart-items"></tbody>
+  </table>
+  <div class="cart-summary">
+      <p>Total: <span id="cart-total">₱0.00</span></p>
+      <button id="checkout-btn">Checkout</button>
+  </div>
+  <br>
+  <a href="shop.html" class="btn__cart">Shop more</a>
+          </div>
+</section>
+
+<!-- Checkout Modal (Pop-up) -->
+<div id="checkout-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Checkout Form</h2>
+    <form id="checkout-form">
+      <div class="form-container">
+        <!-- Left column -->
+        <div class="left-column">
+          <label for="email">Email (Gmail):</label>
+          <input type="email" id="email" name="email" required>
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+
+        <!-- Right column -->
+        <div class="right-column">
+          <label for="address">Address:</label>
+          <textarea id="address" name="address" required></textarea>
+
+          <label for="contact">Contact Number:</label>
+          <input type="text" id="contact" name="contact" required>
+        </div>
+      </div>
+
+      <!-- Proceed Button -->
+      <button type="submit" id="proceed-btn">Proceed</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function renderCart() {
+      const cartContainer = document.getElementById('cart-items');
+      const cartTotal = document.getElementById('cart-total');
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cartContainer.innerHTML = '';
+
+      if (cart.length === 0) {
+          cartContainer.innerHTML = '<tr><td colspan="7">Your cart is empty.</td></tr>';
+          cartTotal.textContent = '₱0.00';
+          return;
+      }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+          const itemTotal = (item.price * item.quantity).toFixed(2);
+          total += parseFloat(itemTotal);
+
+          cartContainer.innerHTML += `
+              <tr>
+                  <td><img src="${item.image}" alt="${item.name}" class="cart-item-image" style="width: 50px; height: 50px;"></td>
+                  <td>${item.name}</td>
+                  <td>₱${item.price.toFixed(2)}</td>
+                  <td>
+                      <button onclick="updateQuantity(${index}, 1)">+</button>
+                      ${item.quantity}
+                      <button onclick="updateQuantity(${index}, -1)">-</button>
+                  </td>
+                  <td>
+                      <select id="type-of-design-${index}">
+                          <option value="Paint-by-numbers">Paint-by-numbers</option>
+                          <option value="Painted">Painted</option>
+                      </select>
+                  </td>
+                  <td>₱${itemTotal}</td>
+                  <td><button onclick="removeItem(${index})">Remove</button></td>
+              </tr>
+          `;
+      });
+      cartTotal.textContent = `₱${total.toFixed(2)}`;
+  }
+
+  function updateQuantity(index, change) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      if (cart[index]) {
+          cart[index].quantity += change;
+          if (cart[index].quantity <= 0) cart.splice(index, 1);
+          localStorage.setItem('cart', JSON.stringify(cart));
+          renderCart();
+      }
+  }
+
+  function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      renderCart();
+  }
+
+  document.getElementById('checkout-btn').addEventListener('click', () => {
+      document.getElementById('checkout-modal').style.display = "block";
+  });
+
+  document.getElementsByClassName('close-btn')[0].onclick = function() {
+      document.getElementById('checkout-modal').style.display = "none";
+  }
+
+  window.onclick = function(event) {
+      const modal = document.getElementById('checkout-modal');
+      if (event.target === modal) {
+          modal.style.display = "none";
+      }
+  }
+
+  document.getElementById("checkout-form").addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent page reload
+
+    // Collect user information
+    const userInfo = {
+        email: document.getElementById("email").value,
+        name: document.getElementById("name").value,  
+        address: document.getElementById("address").value,
+        contact: document.getElementById("contact").value
+    };
+
+    // Get cart details
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+        alert("Your cart is empty. Add items before proceeding.");
+        return;
+    }
+
+    let cartDetails = cart.map(item => 
+        `<li>${item.name} - ₱${item.price.toFixed(2)} x ${item.quantity}</li>`
+    ).join("");
+
+    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    // Send Email using EmailJS
+    emailjs.send("service_a4neaek", "template_fv2p3od", {
+        email: userInfo.email,
+        name: userInfo.name,
+        address: userInfo.address,
+        contact: userInfo.contact,
+        cart_items: `<ul>${cartDetails}</ul>`,  
+        total_price: total.toFixed(2)
+    }, "VXL2UOzp2Ewoe9cU3")  // Replace with your actual Public Key
+    .then(response => {
+        console.log("Email sent successfully!", response);
+        alert("Order submitted! You will receive a confirmation email.");
+        
+        // Clear cart after checkout
+        localStorage.removeItem("cart");
+        renderCart();
+        
+        // Close modal
+        document.getElementById("checkout-modal").style.display = "none";
+        
+        // Reset the form
+        document.getElementById("checkout-form").reset();
+    })
+    .catch(error => {
+        console.error("Email failed to send", error);
+        alert("There was an issue sending your order confirmation.");
+    });
+});
+
+  renderCart();
+</script>
+
+
+
+      
+
+      <!--=============== NEWSLETTER ===============-->
+      <section class="newsletter"></section>
+    </main>
+
+    <!--=============== FOOTER ===============-->
+    <footer class="footer container">
+      <div class="footer__container grid">
+        <div class="footer__content">
+          <a href="index.html" class="footer__logo">
+            <img src="assets/Images/totetally-logo.png" alt="" class="footer__logo-img">
+          </a>
+
+          <h4 class="footer__subtitle">Contact Us</h4>
+
+          <p class="footer__description">
+            <span>Address:</span> La huerta, Parañaque City
+          </p>
+
+          <p class="footer__description">
+            <span>Phone:</span> (+63)933-438-5370 | (+63)947-200-4219
+          </p>
+
+          <p class="footer__description">
+            <span>Store hours:</span> Mon-Sat 9:00am - 5:00pm
+          </p>
+
+          <p class="footer__description">
+            <span>Email us:</span> totetallybags1@gmail.com
+          </p>
+
+          <div class="footer__social">
+            <h4 class="footer__subtitle">Follow Us</h4>
+
+            <div class="footer__social-links flex">
+              <a href="https://www.facebook.com/profile.php?id=61572291844592">
+                <img src="assets/img/icon-facebook.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="https://www.instagram.com/totetally2025/">
+                <img src="assets/img/icon-instagram.svg" alt="" class="footer__social-icon">
+              </a>
+
+              <a href="">
+                <img src="assets/img/icon-tiktok.svg" alt="" class="footer__social-icon">
+              </a>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">Address</h3>
+
+          <ul class="footer__links">
+            <li><a href="" class="footer__link">About Us</a></li>
+            <li><a href="" class="footer__link">Privacy Policy</a></li>
+            <li><a href="" class="footer__link">Terms & Conditions</a></li>
+            <li><a href="" class="footer__link">How it works</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__content">
+          <h3 class="footer__title">My Account</h3>
+
+          <ul class="footer__links">
+            <li><a href="cart.html" class="footer__link">View Cart</a></li>
+            <li><a href="shop.html" class="footer__link">Order</a></li>
+          </ul>
+        </div>
+      <div class="footer__bottom">
+        <p class="copyright">&copy; 2025 Tote-tally. All rights reserved</p>
+        <span class="designer">Designed by Tote-tally</span>
+      </div>
+    </footer>
+
+    <!--=============== SWIPER JS ===============-->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> 
+
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
